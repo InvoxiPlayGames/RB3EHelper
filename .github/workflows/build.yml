@@ -1,0 +1,23 @@
+name: Build (Windows)
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1
+    - name: Build Solution
+      run: |
+        cd $GITHUB_WORKSPACE
+        nuget restore RB3EHelper.sln
+        msbuild.exe RB3EHelper.sln /p:platform="Any CPU" /p:configuration="Release"
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: RB3EHelper
+        path: RB3EHelper/bin/Release/net6.0-windows
