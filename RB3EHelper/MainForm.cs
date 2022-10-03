@@ -1,4 +1,5 @@
 using DiscordRPC;
+using System.Diagnostics.Metrics;
 using System.Net.Sockets;
 using System.Text;
 
@@ -16,6 +17,38 @@ namespace RB3EHelper
         string song_artist = "";
         string song_name = "";
         string shortname = "";
+        int band_member_count = 0;
+        byte first_track_type = 0;
+        byte first_difficulty = 0;
+
+        private static string InstrumentName(byte track_type)
+        {
+            switch (track_type)
+            {
+                case 0: return "Drums";
+                case 1: return "Guitar";
+                case 2: return "Bass";
+                case 3: return "Vocals";
+                case 4: return "Keys";
+                case 5: return "Pro Keys";
+                case 6: return "Pro Guitar";
+                case 7: return "Harmonies";
+                case 8: return "Pro Bass";
+            }
+            return "Rock band";
+        }
+
+        private static string DifficultyName(byte difficulty)
+        {
+            switch (difficulty)
+            {
+                case 0: return "Easy";
+                case 1: return "Medium";
+                case 2: return "Hard";
+                case 3: return "Expert";
+            }
+            return "Balls hard";
+        }
 
         static private string PlatformString(byte platform)
         {
@@ -81,8 +114,17 @@ namespace RB3EHelper
             // set the song info if we're in a song
             if (in_game && song_name != "" && song_artist != "")
             {
-                rp.Details = $"Playing '{song_name}'";
-                rp.State = $"by {song_artist}";
+                rp.Details = $"'{song_name}' by {song_artist}";
+                if (band_member_count == 1)
+                {
+                    rp.State = $"Playing {DifficultyName(first_difficulty)} {InstrumentName(first_track_type)}";
+                    rp.Assets.SmallImageKey = InstrumentName(first_track_type).ToLower();
+                }
+                else
+                {
+                    rp.State = $"In a {band_member_count} player band";
+                    rp.Assets.SmallImageKey = "band";
+                }
                 rp.Timestamps = new Timestamps()
                 {
                     Start = gamestarted
@@ -161,6 +203,19 @@ namespace RB3EHelper
                         case 4:
                             shortname = Encoding.ASCII.GetString(result.Buffer, RB3E_EventHeader.Size, header.PacketSize);
                             InvokeStringChange(shortnameLabel, shortname);
+                            break;
+                        case 7:
+                            RB3E_EventBandInfo bandinfo = new RB3E_EventBandInfo(result.Buffer, RB3E_EventHeader.Size);
+                            for (int i = 0; i < 4; i++)
+                            {
+                                if (band_member_count == 0)
+                                {
+                                    first_difficulty = bandinfo.Difficulty[i];
+                                    first_track_type = bandinfo.TrackType[i];
+                                }
+                                if (bandinfo.MemberExists[i] == 0x01)
+                                    band_member_count++;
+                            }
                             break;
                         default:
                             Console.WriteLine($"Unknown packet type {header.PacketType}");

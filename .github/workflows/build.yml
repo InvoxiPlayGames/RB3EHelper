@@ -10,12 +10,11 @@ jobs:
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
     - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1
+     es: NuGet/setup-nuget@v1
     - name: Build Solution
       run: |
-        cd $GITHUB_WORKSPACE
-        nuget restore RB3EHelper.sln
-        msbuild.exe RB3EHelper.sln /p:platform="Any CPU" /p:configuration="Release"
+        nuget restore ./RB3EHelper.sln
+        msbuild.exe ./RB3EHelper.sln /p:platform="Any CPU" /p:configuration="Release"
     - name: Upload
       uses: actions/upload-artifact@v2
       with:

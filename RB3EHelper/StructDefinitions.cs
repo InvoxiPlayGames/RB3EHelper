@@ -59,4 +59,25 @@
             RightChannel = data[start + 1];
         }
     }
+
+    class RB3E_EventBandInfo
+    {
+        public static int Size = 0xC;
+        public byte[] MemberExists;
+        public byte[] Difficulty;
+        public byte[] TrackType;
+
+        public RB3E_EventBandInfo(byte[] data, int start)
+        {
+            if (data.Length - start < Size)
+                throw new Exception("Invalid byte array size given for RB3E_EventScore constructor.");
+
+            MemberExists = new byte[4];
+            Difficulty = new byte[4];
+            TrackType = new byte[4];
+            Array.Copy(data, start + 0, MemberExists, 0, 4);
+            Array.Copy(data, start + 4, Difficulty, 0, 4);
+            Array.Copy(data, start + 8, TrackType, 0, 4);
+        }
+    }
 }

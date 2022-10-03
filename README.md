@@ -1,6 +1,6 @@
 # RB3EHelper
 
-A simple C# .NET 6.0 program to fetch data from the [RB3Enhanced](https://rb3e.rbenhanced.rocks) mod for Rock Band 3 over the network.
+A simple C# .NET 6.0 program to fetch data from the [RB3Enhanced](https://github.com/RBEnhanced/RB3Enhanced) mod for Rock Band 3 over the network.
 
 Currently, this can output both to a Discord status and to text files (for use with OBS layouts, and such).
 
