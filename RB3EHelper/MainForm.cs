@@ -182,6 +182,7 @@ namespace RB3EHelper
                                 song_name = "";
                                 song_artist = "";
                                 shortname = "";
+                                band_member_count = 0;
                                 InvokeStringChange(songnameLabel, "N/A");
                                 InvokeStringChange(songartistLabel, "N/A");
                                 InvokeStringChange(shortnameLabel, "N/A");
