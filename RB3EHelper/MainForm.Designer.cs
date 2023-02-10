@@ -162,6 +162,7 @@
             this.txttargetBox.TabIndex = 33;
             this.txttargetBox.Text = "TXT";
             this.txttargetBox.UseVisualStyleBackColor = true;
+            this.txttargetBox.CheckedChanged += new System.EventHandler(this.txttargetBox_CheckedChanged);
             // 
             // MainForm
             // 
@@ -182,7 +183,6 @@
             this.Controls.Add(this.statusLabel);
             this.Controls.Add(this.label1);
             this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "RB3EHelper";

@@ -8,7 +8,7 @@ namespace RB3EHelper
     public partial class MainForm : Form
     {
         UdpClient listener;
-        DiscordRpcClient? discord;
+        DiscordRpcClient? discord = null;
         bool in_game = false;
         DateTime gamestarted;
         bool discord_active = false;
@@ -228,11 +228,15 @@ namespace RB3EHelper
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            rpctargetBox.Checked = Properties.Settings.Default.DiscordOutput;
+            txttargetBox.Checked = Properties.Settings.Default.TXTOutput;
             Task.Run(ListenerThread);
         }
 
         private void rpctargetBox_CheckedChanged(object sender, EventArgs e)
         {
+            Properties.Settings.Default.DiscordOutput = rpctargetBox.Checked;
+            Properties.Settings.Default.Save();
             if (rpctargetBox.Checked)
             {
                 if (discord == null)
@@ -251,6 +255,12 @@ namespace RB3EHelper
                     discord = null;
                 }
             }
+        }
+
+        private void txttargetBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.TXTOutput = txttargetBox.Checked;
+            Properties.Settings.Default.Save();
         }
     }
 }
